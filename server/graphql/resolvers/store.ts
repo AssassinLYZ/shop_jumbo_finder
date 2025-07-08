@@ -2,23 +2,41 @@ import type { Facilities, Store } from '../../../types/store';
 import { readFile } from 'fs/promises';
 import path from 'path';
 export const getStoresData = async (): Promise<Store[]> => {
+
   const filePath = path.resolve(process.cwd(), 'public', 'jumbo-store-data.json');
 
-  try {
-    const data = await readFile(filePath, 'utf-8');
-    const parsedData = JSON.parse(data);
-    if (!parsedData.stores) {
-      throw new Error('Stores not found in data');
+
+  if (process.env.NODE_ENV === 'production') {
+    const baseUrl = process.env.API_BASE_URL || 'http://localhost:3000';
+    const fileUrl = `${baseUrl}/jumbo-store-data.json`;
+    try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch store data');
+      }
+      const data = await response.json();
+      if (!data.stores) {
+        throw new Error('Stores not found in data');
+      }
+      return data.stores;
+    } catch (error) {
+      console.error('Error fetching stores:', error);
+      throw new Error('Store data file not found');
     }
-
-    return parsedData.stores;
-  } catch (error) {
-    console.error('Error fetching stores:', error);
-    throw new Error('Store data file not found');
+  } else {
+    try {
+      const data = await readFile(filePath, 'utf-8');
+      const parsedData = JSON.parse(data);
+      if (!parsedData.stores) {
+        throw new Error('Stores not found in data');
+      }
+      return parsedData.stores;
+    } catch (error) {
+      console.error('Error fetching stores:', error);
+      throw new Error('Store data file not found');
+    }
   }
-
 };
-
 export const storeResolvers = {
   Query: {
     stores: async () => {
