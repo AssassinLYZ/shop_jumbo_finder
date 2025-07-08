@@ -4,8 +4,10 @@ import { defineNuxtPlugin } from 'nuxt/app';
 import type { NuxtApp } from 'nuxt/app';
 
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
+
+  const config = useRuntimeConfig();
   const httpLink = createHttpLink({
-    uri: 'http://localhost:3002/api/graphql',
+    uri: config.public.graphqlUrl,
     credentials: 'same-origin',
   });
 
@@ -25,3 +27,5 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
 
   nuxtApp.vueApp.provide(DefaultApolloClient, apolloClient);
 });
+
+

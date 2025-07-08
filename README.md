@@ -145,7 +145,7 @@ Language switching is available through the language switcher in the header.
 
 The application is configured with:
 
-- Port: 3002 (development)
+- Port: 3000 (development)
 - Default locale: Dutch
 - GraphQL integration
 - Pinia for state management
@@ -173,18 +173,3 @@ The application is configured with:
 - Flexible grid layouts
 - Touch-friendly interactions
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-For support and questions, please open an issue in the repository.

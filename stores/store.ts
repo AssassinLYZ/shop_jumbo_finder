@@ -58,29 +58,7 @@ export const useStoreStore = defineStore('store', {
       try {
         const data = await fetchStores();
         // Ensure data is serializable by creating plain objects
-        this.stores = data.stores.map(store => ({
-          ...store,
-          // Ensure nested objects are plain objects
-          location: {
-            ...store.location,
-            address: { ...store.location.address }
-          },
-          facilities: { ...store.facilities },
-          commerce: {
-            inStore: { ...store.commerce.inStore },
-            homeDelivery: { ...store.commerce.homeDelivery },
-            collection: { ...store.commerce.collection }
-          },
-          openingHours: {
-            monday: { ...store.openingHours.monday },
-            tuesday: { ...store.openingHours.tuesday },
-            wednesday: { ...store.openingHours.wednesday },
-            thursday: { ...store.openingHours.thursday },
-            friday: { ...store.openingHours.friday },
-            saturday: { ...store.openingHours.saturday },
-            sunday: { ...store.openingHours.sunday }
-          }
-        }));
+        this.stores = data.stores;
         this.fetched = true;
         return this.stores;
       } catch (err) {

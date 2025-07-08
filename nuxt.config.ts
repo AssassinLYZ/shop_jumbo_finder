@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      graphqlUrl: process.env.NUXT_PUBLIC_GRAPHQL_URL || 'http://localhost:3002/api/graphql'
     },
   },
   nitro: {
@@ -21,6 +22,13 @@ export default defineNuxtConfig({
       routes: ['/en', '/nl'],
       ignore: ['/'],
     },
+    // Ensure data files are copied to the build output
+    storage: {
+      'server/data': {
+        driver: 'fs',
+        base: './server/data'
+      }
+    }
   },
   i18n: {
     locales: [
