@@ -66,7 +66,7 @@
         <div v-if="storeStore.error" class="error">
           {{ $t('common.error') }}: {{ storeStore.error }}
         </div>
-        <div v-if="!storeStore.loading && !storeStore.error">
+        <div v-if="!storeStore.loading && !storeStore.error && storeStore?.stores?.length > 0">
           <p class="main-page__filter_number">
             {{
               $t('search.resultsFound', {

@@ -55,7 +55,7 @@ describe('useStoreStore', () => {
       vi.mocked(fetchStores).mockRejectedValue(mockError);
       const store = useStoreStore();
       await store.fetchAllStores();
-      expect(store.error).toEqual(mockError);
+      expect(store.error).toEqual(mockError.message);
       expect(store.loading).toBe(false);
       expect(store.stores).toEqual([]);
     });

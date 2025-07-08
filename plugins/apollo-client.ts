@@ -5,9 +5,8 @@ import type { NuxtApp } from 'nuxt/app';
 
 export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
 
-  const config = useRuntimeConfig();
   const httpLink = createHttpLink({
-    uri: config.public.graphqlUrl,
+    uri: getGraphQLUrl(),
     credentials: 'same-origin',
   });
 
@@ -28,4 +27,10 @@ export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
   nuxtApp.vueApp.provide(DefaultApolloClient, apolloClient);
 });
 
-
+function getGraphQLUrl(): string {
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:3002/api/graphql';
+  } else {
+    return 'http://localhost:3000/api/graphql';
+  }
+}

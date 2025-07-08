@@ -1,35 +1,31 @@
-import fs from 'fs';
-import path from 'path';
 import type { Facilities, Store } from '../../../types/store';
 
-const getStoresData = (): Store[] => {
-  const filePath = path.resolve(process.cwd(), 'server/data/jumbo-store-data.json');
-  const data = fs.readFileSync(filePath, 'utf-8');
-  const parsedData = JSON.parse(data);
-  return parsedData.stores;
+export const getStoresData = async (): Promise<Store[]> => {
+  const data = await useStorage('data').getItem('jumbo-store-data.json');
+  if (!data) throw new Error('Store data file not found');
+  const stores = typeof data === 'string' ? JSON.parse(data).stores : (data as any).stores;
+  return stores;
 };
-
 export const storeResolvers = {
   Query: {
-    stores: () => {
-      return getStoresData();
+    stores: async () => {
+      return await getStoresData();
     },
 
-    store: ({ storeId }: { storeId: string }) => {
-      const stores = getStoresData();
+    store: async (_: unknown, { storeId }: { storeId: string }) => {
+      const stores = await getStoresData();
       return stores.find((store: Store) => store.storeId === storeId);
     },
 
-    storesByCity: (_: unknown, { city }: { city: string }) => {
-      console.log(_);
-      const stores = getStoresData();
+    storesByCity: async (_: unknown, { city }: { city: string }) => {
+      const stores = await getStoresData();
       return stores.filter((store: Store) =>
-        store.location.address.city.toLowerCase().includes(city.toLowerCase()),
+        store.location.address.city.toLowerCase().includes(city.toLowerCase())
       );
     },
 
-    storesWithFacility: (_: unknown, { facility }: { facility: string }) => {
-      const stores = getStoresData();
+    storesWithFacility: async (_: unknown, { facility }: { facility: string }) => {
+      const stores = await getStoresData();
       return stores.filter((store: Store) => {
         const facilities = store.facilities as Facilities;
         return facilities[facility as keyof Facilities] === true;

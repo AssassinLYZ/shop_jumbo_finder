@@ -58,7 +58,7 @@ export const useStoreStore = defineStore('store', {
       try {
         const data = await fetchStores();
         // Ensure data is serializable by creating plain objects
-        this.stores = data.stores;
+        this.stores = data.stores ?? [];
         this.fetched = true;
         return this.stores;
       } catch (err) {
